@@ -4,7 +4,7 @@ signal hit
 
 @export var speed = 400
 var screen_size
-
+@export var player_gravity = 0.5
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	screen_size = get_viewport_rect().size
@@ -22,6 +22,8 @@ func _process(delta):
 	if Input.is_action_pressed("move_up"):
 		velocity.y-=1
 	
+	velocity.y+=player_gravity
+
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
 		$AnimatedSprite2D.play()
@@ -34,7 +36,6 @@ func _process(delta):
 func _on_body_entered(body: Node2D) -> void:
 	hide()
 	hit.emit()
-
 	$CollisionShape2D.set_deferred("disabled", true)
 
 func start(pos):
